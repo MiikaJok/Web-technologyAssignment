@@ -1,5 +1,19 @@
 {
   "dependencies": {
     "lodash": "^4.17.21"
-  }
+  },
+  "name": "web-technologyassignment",
+  "description": "Opettajan tuntiesimerkit kevään 2023 web-teknologian\r peruskonseptit kurssille.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  },
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1\"",
+    "docs": "mkdir docs && touch docs/readme.md"
+  },
+  "author": "Miika Jokinen",
+  "license": "ISC"
 }
