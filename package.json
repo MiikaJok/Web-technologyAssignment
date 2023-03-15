@@ -4,7 +4,7 @@
     "lodash": "^4.17.21"
   },
   "name": "web-technologyassignment",
-  "description": "Opettajan tuntiesimerkit kevään 2023 web-teknologian\r peruskonseptit kurssille.",
+  "description": "Testing express server.",
   "version": "1.0.0",
   "main": "index.js",
   "devDependencies": {
