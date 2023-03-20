@@ -8,6 +8,8 @@ const getCatList = (req, res) => {
 };
 
 const postCat = (req, res) => {
+    console.log("posting a cat ", req.body, req.file);
+    // TODO:
     res.send("With this endpoint");
 };
 

@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 app.use(express.static('example-ui'));
 
 // add cors headers using cors middleware
-// app.use(cors());
+app.use(cors());
 
 // middleware parsing request body
 app.use(express.json());
