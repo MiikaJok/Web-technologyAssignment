@@ -2,14 +2,23 @@
 const userModel = require('../models/userModel');
 
 const users = userModel.users;
+for (const user of users) {
+    delete user.password;
+}
 
 const getUserList = (req, res) => {
     res.json(users);
 };
 
-const createUser = (req, res) => {
-    const createUser = req.params.users;
-    res.json(createUser)
+const postUser = (req, res) => {
+    console.log('req body', req.body);
+    const newUser = {
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.passwd
+    }
+    users.push(newUser);
+    res.status(201).send("Added user " + req.body.name);
 };
 
 const modifyUser = (req, res) => {
@@ -45,5 +54,5 @@ const getUser = (req, res) => {
      */
 };
 
-const UserController = {getUserList, getUser, createUser, modifyUser, deleteUser};
+const UserController = {getUserList, getUser, postUser, modifyUser, deleteUser};
 module.exports = UserController;

@@ -7,9 +7,8 @@ const getCatList = (req, res) => {
     res.json(cats);
 };
 
-const createCat = (req, res) => {
-    const createCat = req.params.cats;
-    res.json(createCat)
+const postCat = (req, res) => {
+    res.send("With this endpoint");
 };
 
 const modifyCat = (req, res) => {
@@ -45,5 +44,5 @@ const getCat = (req, res) => {
      */
 };
 
-const catController = {getCatList, getCat, createCat, modifyCat, deleteCat};
+const catController = {getCatList, getCat, postCat, modifyCat, deleteCat};
 module.exports = catController;
