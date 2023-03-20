@@ -6,15 +6,6 @@ module.exports = router;
 
 router.get('/', catController.getCatList);
 router.get('/:catId', catController.getCat);
-
-router.post('/', (req, res) => {
-    res.send('From this endpoint you can add cats.');
-});
-
-router.put('/', (req, res) => {
-    res.send('From this endpoint you can modify a cat.');
-});
-
-router.delete('/', (req, res) => {
-    res.send('From this endpoint you can delete cats.');
-});
+router.post('/', catController.createCat);
+router.put('/', catController.modifyCat);
+router.delete('/', catController.deleteCat);
