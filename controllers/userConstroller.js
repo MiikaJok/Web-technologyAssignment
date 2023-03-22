@@ -1,6 +1,6 @@
 'use strict';
 const userModel = require('../models/userModel');
-
+// TODO: add db connection and functions to userModel
 const users = userModel.users;
 for (const user of users) {
     delete user.password;
