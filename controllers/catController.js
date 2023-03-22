@@ -9,8 +9,12 @@ const getCatList = (req, res) => {
 
 const postCat = (req, res) => {
     console.log("posting a cat ", req.body, req.file);
-    // TODO:
-    res.send("With this endpoint");
+    // add cat details to cats array
+    const newCat = req.body;
+    newCat.filename='http://localhost:3000/' + req.file.path;
+    cats.push(newCat);
+    //send correct response if upload is successful
+    res.status(201).send("New cat added!");
 };
 
 const modifyCat = (req, res) => {

@@ -12,6 +12,8 @@ app.use((req, res, next) => {
    next();
 });
 
+app.use('/uploads', express.static("uploads"));
+
 // serve example-ui
 app.use(express.static('example-ui'));
 
