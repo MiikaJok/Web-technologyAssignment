@@ -1,9 +1,8 @@
 'use strict';
 const catModel = require('../models/catModel');
 
-const cats = catModel.cats;
-
-const getCatList = (req, res) => {
+const getCatList = async (req, res) => {
+    const cats = await catModel.getAllCats();
     res.json(cats);
 };
 
