@@ -7,5 +7,8 @@ module.exports = router;
 router.get('/', UserController.getUserList);
 router.get('/:userId', UserController.getUser);
 router.post('/', UserController.postUser);
-router.put('/', UserController.modifyUser);
-router.delete('/', UserController.deleteUser);
+//router.put('/', UserController.modifyUser);
+//router.delete('/', UserController.deleteUser);
+
+//TODO: add another endpoints needed
+//TODO: add validation &

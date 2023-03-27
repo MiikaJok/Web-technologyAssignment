@@ -1,5 +1,7 @@
 'use strict';
+
 const catModel = require('../models/catModel');
+const {validationResult} = require('express-validator');
 
 const getCatList = async (req, res) => {
     try {
@@ -16,12 +18,20 @@ const getCatList = async (req, res) => {
 
 };
 const postCat = async (req, res) => {
-    console.log("posting a cat ", req.body, req.file);
-    try {
-
-    // add cat details to cats array
+    if (!req.file) {
+        res.status(400).json({status: 400, message: "Invalid or missing image file"});
+        return;
+    }
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        res.status(400).json({status: 400, errors: validationErrors.array, message: "Invalid data"});
+        return;
+    }
+    //console.log("posting a cat ", req.body, req.file);
     const newCat = req.body;
     newCat.filename = req.file.filename;
+
+    try {
     const result = await catModel.insertCat(newCat);
     //send correct response if upload is successful
     res.status(201).json("New cat added!");
@@ -31,8 +41,13 @@ const postCat = async (req, res) => {
 };
 
 const modifyCat = async (req, res) => {
-    console.log("modifying a cat ", req.body);
+    //console.log("modifying a cat ", req.body);
     const cat = req.body;
+    const validationErrors = validationResult(req);
+    if (!validationErrors.isEmpty()) {
+        res.status(400).json({status: 400, errors: validationErrors.array(), message: "Invalid PUT data"});
+        return;
+    }
     try {
         const result = await catModel.modifyCat(cat);
         //send correct response if upload is successful
@@ -43,7 +58,7 @@ const modifyCat = async (req, res) => {
 };
 
 const deleteCat = async (req, res) => {
-    console.log("deleting a cat ", req.params.id)
+    //console.log("deleting a cat ", req.params.id)
     try {
     const result = await catModel.deleteCat(req.params.id);
     //send correct response if upload is successful
@@ -64,7 +79,7 @@ const getCat = async (req, res) => {
     try {
 
     const [cat] = await catModel.getCatById(catId);
-    console.log('getcat', cat);
+    //console.log('getcat', cat);
     res.json(cat);
     } catch (error){
         res.status(400).json({error: 500, message: error.message})
