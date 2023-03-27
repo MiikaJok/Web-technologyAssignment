@@ -1,15 +1,15 @@
 'use strict';
 const userModel = require('../models/userModel');
 // TODO: add db connection and functions to userModel
-const users = userModel.users;
-for (const user of users) {
-    delete user.password;
-}
-
-const getUserList = (req, res) => {
-    res.json(users);
+const getUserList = async (req, res) => {
+    try {
+       const users = await userModel.getAllUsers();
+        res.json(users);
+    } catch (error){
+        res.status(500).json({error: 500, message: error.message})
+    }
 };
-
+// TODO: update for new user model (check cat controller for example)
 const postUser = (req, res) => {
     console.log('req body', req.body);
     const newUser = {

@@ -6,10 +6,15 @@ const catController = require('../controllers/catController');
 
 const upload = multer({dest: 'uploads/'});
 
-router.get('/', catController.getCatList);
-router.get('/:catId', catController.getCat);
-router.post('/', upload.single('cat'), catController.postCat);
-router.put('/', catController.modifyCat);
-router.delete('/:catId', catController.deleteCat);
+//root of cat endpoint (http://localhost:300/cat)
+router.route('/')
+    .get(catController.getCatList)
+    .post(upload.single('cat'), catController.postCat)
+    .put(catController.modifyCat)
+
+// All cat/:id endpoints
+router.route('/:id')
+    .get(catController.getCat)
+    .delete(catController.deleteCat)
 
 module.exports = router;
