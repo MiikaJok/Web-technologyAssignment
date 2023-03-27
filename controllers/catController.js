@@ -6,7 +6,7 @@ const getCatList = async (req, res) => {
         let cats = await catModel.getAllCats();
         // convert ISO date to date only
          cats = cats.map(cat => {
-            cat.birthdate = cat.birthdate.toISOString().split('T'[0]);
+            cat.birthdate = cat.birthdate.toISOString().split('T')[0];
             return cat;
         });
         res.json(cats);
