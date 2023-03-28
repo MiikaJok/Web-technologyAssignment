@@ -26,7 +26,7 @@ router.route('/')
         body('weight').isFloat({min: 0.1, max: 30}),
         body('owner').isInt({min: 1}), catController.postCat)
     .put(
-        body('name').isAlphanumeric().isLength({min: 1, max: 200}),
+        body('name').isAlphanumeric().isLength({min: 1, max: 200}).escape().trim(),
         body('birthdate').isDate(),
         body('weight').isFloat({min: 0.1, max: 30}),
         body('owner').isInt({min: 1}), catController.modifyCat)

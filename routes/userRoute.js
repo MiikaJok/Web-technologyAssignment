@@ -2,15 +2,23 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/userConstroller');
+const {body} = require('express-validator');
+
 
 router.route('/')
     .get(UserController.getUserList)
-    .post(UserController.postUser)
+    .post(
+       body('name').isAlphanumeric().isLength({min: 3, max: 100}).escape().trim(),
+       body('email').isEmail(),
+       body('passwd').isLength({min: 8}), UserController.postUser)
+
+    /*.put(
+        body('name').isAlphanumeric().isLength({min: 3, max: 100}).escape().trim(),
+        body('email').isEmail(),
+        body('passwd').isLength({min: 8}), UserController.modifyUser);*/
+    //.delete( UserController.deleteUser);
+
 router.route('/:id')
     .get(UserController.getUser)
-//router.put('/', UserController.modifyUser);
-//router.delete('/', UserController.deleteUser);
 
-//TODO: add another endpoints needed
-//TODO: add validation &
 module.exports = router;
