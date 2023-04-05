@@ -86,5 +86,6 @@ const getCat = async (req, res) => {
     }
 };
 
+
 const catController = {getCatList, getCat, postCat, modifyCat, deleteCat};
 module.exports = catController;

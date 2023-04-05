@@ -38,6 +38,19 @@ const insertUser = async (user) => {
     throw new Error('sql insert user failed');
   }
 }
+
+const getUserLogin = async (email) => {
+  try {
+    console.log("get use login for ", email);
+    const [rows] = await promisePool.execute(
+        'SELECT * FROM wop_user WHERE email = ?;',
+        [email]);
+    return rows;
+  } catch (e) {
+    console.log('error', e.message);
+  }
+};
+
 /*const modifyUser = async (user) => {
   try {
     const sql = 'UPDATE wop_user SET name=? WHERE user_id=?';
@@ -65,6 +78,7 @@ module.exports = {
   getAllUsers,
   getUserById,
   insertUser,
+  getUserLogin,
   //modifyUser,
   //deleteUser,
 };

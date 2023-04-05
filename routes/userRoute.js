@@ -5,13 +5,14 @@ const UserController = require('../controllers/userConstroller');
 const {body} = require('express-validator');
 
 
+
 router.route('/')
     .get(UserController.getUserList)
     .post(
        body('name').isAlphanumeric().isLength({min: 3, max: 100}).escape().trim(),
        body('email').isEmail(),
        body('passwd').isLength({min: 8}), UserController.postUser)
-
+router.get("/token", UserController.checkToken);
     /*.put(
         body('name').isAlphanumeric().isLength({min: 3, max: 100}).escape().trim(),
         body('email').isEmail(),
@@ -20,5 +21,4 @@ router.route('/')
 
 router.route('/:id')
     .get(UserController.getUser)
-
 module.exports = router;

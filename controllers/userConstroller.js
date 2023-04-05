@@ -35,8 +35,11 @@ const getUser = async (req, res) => {
         res.status(400).json({error: 500, message: error.message})
     }
 };
+const checkToken = (req, res) => {
+    res.json({user: req.user});
+};
 const UserController = {
-    getUserList, getUser, postUser
+    getUserList, getUser, postUser, checkToken,
     //modifyUser,
     //deleteUser,
 };
