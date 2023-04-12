@@ -1,5 +1,6 @@
 'use strict';
 const userModel = require('../models/userModel');
+const bcrypt = require("bcryptjs");
 
 const getUserList = async (req, res) => {
     try {
@@ -10,9 +11,16 @@ const getUserList = async (req, res) => {
     }
 };
 const postUser = async (req, res) => {
+    const salt = await bcrypt.getSalt(10);
+    const password = await bcrypt.hash(req.body.passwd, salt);
+    const newUser = {
+        name: req.body.name,
+        email: req.body.email,
+        password: password,
+        role: 1,
+    };
     // console.log('req body', req.body);
     try {
-        const newUser = req.body;
         const result = await userModel.insertUser(newUser);
         res.status(201).send("Added user " + req.body.name);
     } catch(error){

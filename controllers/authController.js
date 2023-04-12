@@ -1,6 +1,7 @@
 "use strict";
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+require("dotenv").config();
 
 
 const login = (req, res) => {
@@ -22,6 +23,11 @@ const login = (req, res) => {
         });
     })(req, res);
 };
+
+const logout = (req,res) => {
+    res.json({message: "Logged out"})
+}
 module.exports = {
     login,
+    logout,
 };

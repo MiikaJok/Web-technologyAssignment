@@ -2,15 +2,16 @@
 
 const catModel = require('../models/catModel');
 const {validationResult} = require('express-validator');
+const {makeThumbnail} = require("../utils/image");
 
 const getCatList = async (req, res) => {
     try {
         let cats = await catModel.getAllCats();
         // convert ISO date to date only
-         cats = cats.map(cat => {
+         /*cats = cats.map(cat => {
             cat.birthdate = cat.birthdate.toISOString().split('T')[0];
             return cat;
-        });
+        });*/
         res.json(cats);
     } catch (error) {
         res.status(500).json({error: 500, message: error.message});
@@ -18,31 +19,41 @@ const getCatList = async (req, res) => {
 
 };
 const postCat = async (req, res) => {
+    // console.log('posting a cat', req.body, req.file);
     if (!req.file) {
-        res.status(400).json({status: 400, message: "Invalid or missing image file"});
+        res.status(400).json({
+            status: 400,
+            message: 'Invalid or missing image file'
+        });
         return;
     }
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
-        res.status(400).json({status: 400, errors: validationErrors.array, message: "Invalid data"});
+        res.status(400).json({
+            status: 400,
+            errors: validationErrors.array(),
+            message: 'Invalid post data'
+        });
         return;
     }
-    //console.log("posting a cat ", req.body, req.file);
     const newCat = req.body;
     newCat.filename = req.file.filename;
-
+    // use req.user (extracted from token by passport) to add correct owner id
+    // NOTE: owner field must not be validated anymore in cat route when uploading cats
+    newCat.owner = req.user.user_id;
+    await makeThumbnail(req.file.path, newCat.filename);
     try {
-    const result = await catModel.insertCat(newCat);
-    //send correct response if upload is successful
-    res.status(201).json("New cat added!");
+        const result = await catModel.insertCat(newCat);
+        res.status(201).json({message: 'new cat added!'});
     } catch (error) {
-        res.status(400).json({error: 500, message: error.message})
+        res.status(500).json({error: 500, message: error.message});
     }
 };
 
 const modifyCat = async (req, res) => {
     //console.log("modifying a cat ", req.body);
     const cat = req.body;
+
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
         res.status(400).json({status: 400, errors: validationErrors.array(), message: "Invalid PUT data"});
