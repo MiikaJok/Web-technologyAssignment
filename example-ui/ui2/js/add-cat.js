@@ -1,6 +1,6 @@
 'use strict';
-const url = 'https://bcwt-server-miika.northeurope.cloudapp.azure.com/app/'; // change url when uploading to server
-
+const url = 'http://localhost:3000'; // change url when uploading to server
+//const url = 'https://bcwt-server-miika.northeurope.cloudapp.azure.com/app/';
 // select existing html elements
 const addForm = document.querySelector('#addCatForm');
 const userList = document.querySelector('.add-owner');

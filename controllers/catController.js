@@ -18,8 +18,31 @@ const getCatList = async (req, res) => {
     }
 
 };
+
+const getCat = async (req, res) => {
+    // convert id value to number
+    const catId = Number(req.params.id);
+    // check if number is not an integer
+    if (!Number.isInteger(catId)) {
+        res.status(400).json({error: 500, message: 'invalid id'});
+        return;
+    }
+    // TODO: wrap to try-catch
+    const [cat] = await catModel.getCatById(catId);
+    // console.log('getCat', cat);
+    if (cat) {
+        res.json(cat);
+    } else {
+        // send response 404 if id not found in array
+        // res.sendStatus(404);
+        res.status(404).json({message: 'Cat not found.'});
+    }
+};
+
+
 const postCat = async (req, res) => {
-    // console.log('posting a cat', req.body, req.file);
+    console.log("function called cat");
+    console.log('posting a cat', req.body, req.file);
     if (!req.file) {
         res.status(400).json({
             status: 400,
@@ -40,7 +63,8 @@ const postCat = async (req, res) => {
     newCat.filename = req.file.filename;
     // use req.user (extracted from token by passport) to add correct owner id
     // NOTE: owner field must not be validated anymore in cat route when uploading cats
-    newCat.owner = req.user.user_id;
+    newCat.owner = req.user[0].user_id;
+    console.log("djs", req.user[0].user_id);
     await makeThumbnail(req.file.path, newCat.filename);
     try {
         const result = await catModel.insertCat(newCat);
@@ -50,21 +74,32 @@ const postCat = async (req, res) => {
     }
 };
 
-const modifyCat = async (req, res) => {
-    //console.log("modifying a cat ", req.body);
-    const cat = req.body;
-
+const putCat = async (req, res) => {
+    // console.log('modifying a cat', req.body);
     const validationErrors = validationResult(req);
     if (!validationErrors.isEmpty()) {
-        res.status(400).json({status: 400, errors: validationErrors.array(), message: "Invalid PUT data"});
+        res.status(400).json({
+            status: 400,
+            errors: validationErrors.array(),
+            message: 'Invalid PUT data'
+        });
         return;
     }
+    const cat = req.body;
+    // for now owner is always the logged in user (read from token)
+    cat.owner = req.user.user_id;
+    // Note the two alternatives for passing the cat id in router
+    if (req.params.id) {
+        cat.id = parseInt(req.params.id);
+    }
     try {
-        const result = await catModel.modifyCat(cat);
-        //send correct response if upload is successful
-        res.status(201).json({message: "Cat modified!"});
+        console.log('updating a cat', req.body);
+        // only owner of the cat can update it's data (req.user.user_id == cat.owner)
+        // checked in catModel with sql query
+        const result = await catModel.modifyCat(cat, req.user.user_id);
+        res.status(200).json({message: 'cat modified!'});
     } catch (error) {
-        res.status(400).json({error: 500, message: error.message})
+        res.status(500).json({error: 500, message: error.message});
     }
 };
 
@@ -79,24 +114,5 @@ const deleteCat = async (req, res) => {
     }
 };
 
-const getCat = async (req, res) => {
-    // convert id value to number
-    const catId = Number(req.params.id);
-    // check if number is not an integer
-    if (!Number.isInteger(catId)) {
-        res.status(400).json({error: 500, message: 'invalid id'});
-        return;
-    }
-    try {
-
-    const [cat] = await catModel.getCatById(catId);
-    //console.log('getcat', cat);
-    res.json(cat);
-    } catch (error){
-        res.status(400).json({error: 500, message: error.message})
-    }
-};
-
-
-const catController = {getCatList, getCat, postCat, modifyCat, deleteCat};
+const catController = {getCatList, getCat, postCat, putCat, deleteCat};
 module.exports = catController;

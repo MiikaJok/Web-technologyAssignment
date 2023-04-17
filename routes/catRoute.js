@@ -20,7 +20,8 @@ const upload = multer({dest: 'uploads/', fileFilter});
 //root of cat endpoint (http://localhost:300/cat)
 router.route('/')
     .get(catController.getCatList)
-    .post(upload.single('cat'),
+    .post(
+        upload.single('cat'),
         body('name').isAlphanumeric().isLength({min: 1, max: 200}).escape().trim(),
         body('birthdate').isDate(),
         body('weight').isFloat({min: 0.1, max: 30}),
@@ -29,11 +30,11 @@ router.route('/')
         body('name').isAlphanumeric().isLength({min: 1, max: 200}).escape().trim(),
         body('birthdate').isDate(),
         body('weight').isFloat({min: 0.1, max: 30}),
-        catController.modifyCat)
+        catController.putCat)
 
 // All cat/:id endpoints
 router.route('/:id')
     .get(catController.getCat)
-    .delete(catController.deleteCat)
+    .delete(catController.deleteCat);
 
 module.exports = router;

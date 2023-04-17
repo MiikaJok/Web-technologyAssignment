@@ -46,7 +46,7 @@ const insertCat = async (cat) => {
     console.error("error", e.message);
     throw new Error('sql insert cat failed');
   }
-}
+};
 
 const modifyCat = async (cat) => {
   try {
@@ -57,7 +57,7 @@ const modifyCat = async (cat) => {
       cat.weight,
       cat.owner,
       cat.birthdate,
-      cat.id
+      cat.id,
     ]);
     // console.log(rows);
     return rows;

@@ -23,21 +23,16 @@ const getUserById = async (id) => {
 };
 
 const insertUser = async (user) => {
-  console.log('insertUser', user)
   try {
-    const sql = `INSERT INTO wop_user VALUES (null, ?, ?, ?, 1)`;
-    const [rows] = await promisePool.query(sql, [
-      user.name,
-      user.email,
-      user.passwd,
-    ]);
-    // console.log(rows);
-    return rows;
+    const sql = 'INSERT INTO wop_user VALUES (null, ?, ?, ?, ?)';
+    const values = [user.name, user.email, user.password, user.role];
+    const [result] = await promisePool.query(sql, values);
+    return result.insertId;
   } catch (e) {
-    console.error("error", e.message);
-    throw new Error('sql insert user failed');
+    console.error('error', e.message);
+    throw new Error('sql query failed');
   }
-}
+};
 
 const getUserLogin = async (email) => {
   try {
@@ -51,19 +46,19 @@ const getUserLogin = async (email) => {
   }
 };
 
-/*const modifyUser = async (user) => {
+const updateUser = async (user) => {
   try {
-    const sql = 'UPDATE wop_user SET name=? WHERE user_id=?';
-    const [rows] = await promisePool.query(sql, [user.name, user.user.id]);
-    //console.log(rows);
-    return rows;
+    const sql = 'UPDATE wop_user SET name=?, email=?, password=?, role=? WHERE user_id=?';
+    const values = [user.name, user.email, user.passwd, user.role];
+    const [result] = await promisePool.query(sql, values);
+    return result.insertId;
   } catch (e) {
-    console.error("error", e.message);
-    throw new Error('sql update user failed');
+    console.error('error', e.message);
+    throw new Error('sql query failed');
   }
-}
+};
 
-const deleteUser = async (id) => {
+/*const deleteUser = async (id) => {
   try {
     const sql = 'DELETE FROM wop_user WHERE user_id=?';
     const [rows] = await promisePool.query(sql, [id]);
@@ -79,6 +74,6 @@ module.exports = {
   getUserById,
   insertUser,
   getUserLogin,
-  //modifyUser,
+  updateUser,
   //deleteUser,
 };
